@@ -54,6 +54,15 @@
             </div>
             <br>
             <div class="card">
+                <div class="card-header">Github</div>
+                <div class="card-body">
+                    <div class="">
+                        <a href="https://github.com/jarvisTse/BookTracking">https://github.com/jarvisTse/BookTracking</a>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="card">
                 <div class="card-header">Update info</div>
                 <div class="card-body">
                     <div class="">
@@ -159,34 +168,17 @@
                             <p>Dont blindly copy, view "important" >>>> /app/Http/Controller/BooksController.php</p>
                           </div>
                         </div>
+                        <p>
+                          <a class="btn btn-primary" data-toggle="collapse" href="#update8">19/3 22:00 Update List:</a>
+                        </p>
+                        <div class="collapse pb-2" id="update8">
+                          <div class="card card-body">
+                            <p>Update content:</p>
+                            <p>Borrow System</p>
+                            <p>I has almost updated all the file</p>
+                          </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <br>
-            <div class="card">
-                <div class="card-header">Urgent Work List</div>
-                <div class="card-body">
-                    <div class="">
-                        <p>Side-bar/Top-bar Menu</p>
-                        <p>User Permission(3 layers: admin, manager, user)</p>
-                        <p>User Management(for admin)</p>
-                        <p>Book Profile</p>
-                        <p>Book Search(for user)</p>
-                        <p>Book lend and borrow system(for manager)</p>
-                        <p>Borrow and lending record</p>
-                    </div>
-                </div>
-            </div>
-            <br>
-            <div class="card">
-                <div class="card-header">Non-Urgent Work List</div>
-                <div class="card-body">
-                    <div class="">
-                        <p>Manage table sorting and paging</p>
-                        <p>Manage table search</p>
-                        <p>Add Book validate</p>
-                        <p>Change book db structure(allow add image)</p>
-                        <p>search box autocomplete with jquery</p>
                     </div>
                 </div>
             </div>

@@ -8,11 +8,11 @@ As known, the BooksController.php is different from the server, as the image upl
 ### Brief introduction
 Laravel is a web application framework with expressive, elegant syntax. It is a MVC architecture pattern in php language.
 
-Database: database structure setting
-Model: make sure the data pass into database is correct. And declare the relationship of each tables.
-Controller: backend part, used to take data from database and pass to frontend.
-Routes: declare the urls and linkup backend and frontend
-View: frontend part, used to display. Mainly written in html + css + js.
+- Database: database structure setting
+- Model: make sure the data pass into database is correct. And declare the relationship of each tables.
+- Controller: backend part, used to take data from database and pass to frontend.
+- Routes: declare the urls and linkup backend and frontend
+- View: frontend part, used to display. Mainly written in html + css + js.
 
 ### Current vision of this repository (not the server)
 - Laravel: 6.15.1
