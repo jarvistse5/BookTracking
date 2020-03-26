@@ -29,7 +29,7 @@
                 <div class="col-md-6 col-sm-12">
                     <input id="search_content" type="text" class="form-control" name="search_content" value="{{ old('search_content') }}" placeholder="Search" autocomplete="search_content" autofocus>
                 </div>
-                <div class="col-md-2 col-sm-12 mt-3 mt-md-0">
+                <div class="col-md-2 col-sm-12 mt-3 mt-md-0 text-md-left text-right">
                     <button type="submit" class="btn btn-success btn-lg">
                         <strong>Search</strong>
                     </button>

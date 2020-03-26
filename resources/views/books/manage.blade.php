@@ -81,88 +81,47 @@
             @csrf
             <div class="row justify-content-center">
                 <div class="col-md-8">
-                    <div class="form-group row">
+                    <div id="add_book_error" class="error-box text-center text-danger"></div>
+                    <div class="form-group">
                         <label for="title" class="pl-3 col-form-label">Title</label>
-                        <input id="title" type="text" class="form-control @error('title') is-invalid @enderror" name="title" caption="title" value="{{ old('title') }}" required autocomplete="title" autofocus>
-
-                        @error('title')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
+                        <input id="title" type="text" class="form-control add-input" name="title" caption="title" value="{{ old('title') }}" required autocomplete="title" autofocus>
                     </div>
 
-                    <div class="form-group row">
+                    <div class="form-group">
                         <label for="author" class="pl-3 col-form-label">Author</label>
-                        <input id="author" type="text" class="form-control @error('author') is-invalid @enderror" name="author" caption="author" value="{{ old('author') }}" autocomplete="author" autofocus>
-
-                        @error('author')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
+                        <input id="author" type="text" class="form-control add-input" name="author" caption="author" value="{{ old('author') }}" autocomplete="author" autofocus>
                     </div>
 
-                    <div class="form-group row">
+                    <div class="form-group">
                         <label for="publisher" class="pl-3 col-form-label">Publisher</label>
-                        <input id="publisher" type="text" class="form-control @error('publisher') is-invalid @enderror" name="publisher" caption="publisher" value="{{ old('publisher') }}" autocomplete="publisher" autofocus>
-
-                        @error('publisher')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
+                        <input id="publisher" type="text" class="form-control add-input" name="publisher" caption="publisher" value="{{ old('publisher') }}" autocomplete="publisher" autofocus>
                     </div>
 
                     <div class="row justify-content-between">
-                        <div class="form-group row col-md-6">
+                        <div class="form-group col-md-6">
                             <label for="publicationYear" class="pl-3 col-form-label">Publication Year</label>
-                            <input id="publicationYear" type="text" class="form-control @error('publicationYear') is-invalid @enderror" name="publicationYear" caption="publicationYear" value="{{ old('publicationYear') }}" autocomplete="publicationYear" autofocus>
-
-                            @error('publicationYear')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
+                            <input id="publicationYear" type="text" class="form-control add-input" name="publicationYear" caption="publicationYear" value="{{ old('publicationYear') }}" autocomplete="publicationYear" autofocus>
                         </div>
 
-                        <div class="form-group row col-md-6">
+                        <div class="form-group col-md-6">
                             <label for="language" class="pl-3 col-form-label">Language</label>
-                            <input id="language" type="text" class="form-control @error('language') is-invalid @enderror" name="language" caption="language" value="{{ old('language') }}" autocomplete="language" autofocus>
-
-                            @error('language')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
+                            <input id="language" type="text" class="form-control add-input" name="language" caption="language" value="{{ old('language') }}" autocomplete="language" autofocus>
                         </div>
                     </div>
 
                     <div class="row justify-content-between">
-                        <div class="form-group row col-md-6">
+                        <div class="form-group col-md-6">
                             <label for="ISBN" class="pl-3 col-form-label">ISBN</label>
-                            <input id="ISBN" type="text" class="form-control @error('ISBN') is-invalid @enderror" name="ISBN" caption="ISBN" value="{{ old('ISBN') }}" autocomplete="ISBN" autofocus>
-
-                            @error('ISBN')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
+                            <input id="ISBN" type="text" class="form-control add-input" name="ISBN" caption="ISBN" value="{{ old('ISBN') }}" autocomplete="ISBN" autofocus>
                         </div>
 
-                        <div class="form-group row col-md-6">
+                        <div class="form-group col-md-6">
                             <label for="pageNumber" class="pl-3 col-form-label">Page Number</label>
-                            <input id="pageNumber" type="text" class="form-control @error('pageNumber') is-invalid @enderror" name="pageNumber" caption="pageNumber" value="{{ old('pageNumber') }}" autocomplete="pageNumber" autofocus>
-
-                            @error('pageNumber')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
+                            <input id="pageNumber" type="text" class="form-control add-input" name="pageNumber" caption="pageNumber" value="{{ old('pageNumber') }}" autocomplete="pageNumber" autofocus>
                         </div>
                     </div>
                     <div class="row justify-content-between">
-                        <div class="form-group row col-md-6">
+                        <div class="form-group col-md-6">
                             <label for="type" class="pl-3 col-form-label">Type</label>
                             <select id="type" class="form-control custom-select custom-select-lg mb-3" name="type">
                                 <option value="">-- Please Select --</option>
@@ -177,7 +136,7 @@
                             </select>
                         </div>
 
-                        <div class="form-group row col-md-6">
+                        <div class="form-group col-md-6">
                             <label for="status" class="pl-3 col-form-label">Status</label>
                             <select id="status" class="form-control custom-select custom-select-lg mb-3" name="status">
                                 <option selected value="inLibrary">In Library</option>
@@ -187,18 +146,13 @@
                         </div>
                     </div>
 
-                    <div class="form-group row">
+                    <div class="form-group">
                         <label for="description" class="pl-3 col-form-label">Description</label>
                         <!-- <input id="description" type="textarea" class="form-control @error('description') is-invalid @enderror" name="description" caption="description" value="{{ old('description') }}" autocomplete="description" autofocus> -->
-                        <textarea id="description" class="form-control @error('description') is-invalid @enderror" name="description" caption="description" value="{{ old('description') }}" autocomplete="description" autofocus rows="3"></textarea>
-                        @error('description')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
+                        <textarea id="description" class="form-control add-input" name="description" caption="description" value="{{ old('description') }}" autocomplete="description" autofocus rows="3"></textarea>
                     </div>
 
-                    <div class="form-group row">
+                    <div class="form-group">
                         <!-- <label for="image" class="pl-3 col-form-label">Image</label>
                         <div class="custom-file">
                             <input type="file" id="add_book_image" name="image" class="form-control custom-file-input @error('image') is-invalid @enderror">
@@ -210,12 +164,7 @@
                             @enderror
                         </div> -->
                         <label for="image" class="pl-3 col-form-label">Image</label>
-                        <input type="file" id="image" name="image" class="form-control @error('image') is-invalid @enderror">
-                        @error('image')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
+                        <input type="file" id="image" name="image" class="form-control add-input">
                     </div>
                 </div>
             </div>
@@ -246,51 +195,52 @@
             @csrf
             <div class="row justify-content-center">
                 <div class="col-md-8">
-                    <div class="form-group row">
+                    <div id="edit_book_error" class="error-box text-center text-danger"></div>
+                    <div class="form-group">
                         <label for="id" class="pl-3 col-form-label">ID</label>
                         <input id="book_edit_id" type="text" class="form-control" name="id" disabled>
                     </div>
-                    <div class="form-group row">
+                    <div class="form-group">
                         <label for="title" class="pl-3 col-form-label">Title</label>
-                        <input id="book_edit_title" type="text" class="form-control" name="title" required>
+                        <input id="book_edit_title" type="text" class="form-control edit-input" name="title" required>
                     </div>
 
-                    <div class="form-group row">
+                    <div class="form-group">
                         <label for="author" class="pl-3 col-form-label">Author</label>
-                        <input id="book_edit_author" type="text" class="form-control" name="author">
+                        <input id="book_edit_author" type="text" class="form-control edit-input" name="author">
                     </div>
 
-                    <div class="form-group row">
+                    <div class="form-group">
                         <label for="publisher" class="pl-3 col-form-label">Publisher</label>
-                        <input id="book_edit_publisher" type="text" class="form-control" name="publisher">
+                        <input id="book_edit_publisher" type="text" class="form-control edit-input" name="publisher">
                     </div>
 
                     <div class="row justify-content-between">
-                        <div class="form-group row col-md-6">
+                        <div class="form-group col-md-6">
                             <label for="publicationYear" class="pl-3 col-form-label">Publication Year</label>
-                            <input id="book_edit_publicationYear" type="text" class="form-control" name="publicationYear">
+                            <input id="book_edit_publicationYear" type="text" class="form-control edit-input" name="publicationYear">
                         </div>
 
-                        <div class="form-group row col-md-6">
+                        <div class="form-group col-md-6">
                             <label for="language" class="pl-3 col-form-label">Language</label>
-                            <input id="book_edit_language" type="text" class="form-control" name="language">
+                            <input id="book_edit_language" type="text" class="form-control edit-input" name="language">
                         </div>
                     </div>
 
                     <div class="row justify-content-between">
-                        <div class="form-group row col-md-6">
+                        <div class="form-group col-md-6">
                             <label for="ISBN" class="pl-3 col-form-label">ISBN</label>
-                            <input id="book_edit_ISBN" type="text" class="form-control" name="ISBN">
+                            <input id="book_edit_ISBN" type="text" class="form-control edit-input" name="ISBN">
                         </div>
 
-                        <div class="form-group row col-md-6">
+                        <div class="form-group col-md-6">
                             <label for="pageNumber" class="pl-3 col-form-label">Page Number</label>
-                            <input id="book_edit_pageNumber" type="text" class="form-control" name="pageNumber">
+                            <input id="book_edit_pageNumber" type="text" class="form-control edit-input" name="pageNumber">
                         </div>
                     </div>
 
                     <div class="row justify-content-between">
-                        <div class="form-group row col-md-6">
+                        <div class="form-group col-md-6">
                             <label for="status" class="pl-3 col-form-label">Type</label>
                             <select id="book_edit_type" class="form-control custom-select custom-select-lg mb-3" name="type">
                                 <option value="academic">Academic</option>
@@ -303,7 +253,7 @@
                                 <option value="others">Others</option>
                             </select>
                         </div>
-                        <div class="form-group row col-md-6">
+                        <div class="form-group col-md-6">
                             <label for="status" class="pl-3 col-form-label">Status</label>
                             <select id="book_edit_status" class="form-control custom-select custom-select-lg mb-3" name="status">
                                 <option value="inLibrary">In Library</option>
@@ -313,28 +263,26 @@
                         </div>
                     </div>
 
-                    <div class="form-group row">
+                    <div class="form-group">
                         <label for="description" class="col-md-4 col-form-label">Description</label>
-                        <textarea id="book_edit_description" class="form-control" rows="3" name="description"></textarea>
+                        <textarea id="book_edit_description" class="form-control edit-input" rows="3" name="description"></textarea>
                     </div>
 
-                    <div class="form-group row">
+                    <div class="form-group">
                         <label for="image" class="pl-3 col-form-label">Re-upload Image</label>
-                        <input type="file" id="book_edit_image" class="form-control" name="image">
+                        <input type="file" id="book_edit_image" class="form-control edit-input" name="image">
                         <!-- <label for="image" class="pl-3 col-form-label">Image</label>
                         <div class="custom-file">
                             <input type="file" id="book_edit_image" name="image" class="form-control custom-file-input">
                             <label class="custom-file-label text-truncate" for="image" id="book_edit_image_label"></label>
                         </div> -->
                     </div>
-
-
                 </div>
             </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-success edit" id="edit_book_btn" data-dismiss="modal">
+        <button type="submit" class="btn btn-success edit" id="edit_book_btn">
           <span class="glyphicon glyphicon-check"></span> Edit
         </button>
         <button type="button" class="btn btn-warning" data-dismiss="modal">

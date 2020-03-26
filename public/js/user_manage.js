@@ -25,6 +25,9 @@ $(document).on('click', '.user-delete-modal', function() {
 $(document).ready(function(){
     <!-- Submit Add User Form -->
     $("#add_user_btn").on('click', function() {
+        $('.add-input').removeClass("border border-danger");
+        $('.error-box').removeClass("border border-danger rounded");
+        $('.error-box').empty();
         $.ajax({
             type: 'POST',
             url: '/user/add',
@@ -33,17 +36,41 @@ $(document).ready(function(){
                 'name': $('input[name=name]').val(),
                 'email': $('input[name=email]').val(),
                 'password': $('input[name=password]').val(),
-                // 'password-confirm': $('input[name=password-confirm]').val(),
+                'password_confirm': $('input[name=password-confirm]').val(),
                 'role': $('select[name=role]').val(),
             },
-            success: function() {
-                location.reload();
+            success: function(data) {
+                if ($.isEmptyObject(data.error)) {
+                    location.reload();
+                }
+                else {
+                    $('#add_user_error').addClass("border border-danger rounded");
+                    if (!($.isEmptyObject(data.error.name))) {
+                        $('#add_user_error').append("<h2 class='pt-1'>" + data.error.name + "</h2>");
+                        $('#name').addClass("border border-danger");
+                    }
+                    if (!($.isEmptyObject(data.error.email))) {
+                        $('#add_user_error').append("<h2 class='pt-1'>" + data.error.email + "</h2>");
+                        $('#email').addClass("border border-danger");
+                    }
+                    if (!($.isEmptyObject(data.error.password))) {
+                        $('#add_user_error').append("<h2 class='pt-1'>" + data.error.password + "</h2>");
+                        $('#password').addClass("border border-danger");
+                    }
+                    if (!($.isEmptyObject(data.error.password_confirm))) {
+                        $('#add_user_error').append("<h2 class='pt-1'>" + data.error.password_confirm + "</h2>");
+                        $('#password-confirm').addClass("border border-danger");
+                    }
+                }
             },
         });
     });
 
     <!-- Submit Edit User Form -->
     $("#edit_user_btn").on('click', function() {
+        $('.edit-input').removeClass("border border-danger");
+        $('.error-box').removeClass("border border-danger rounded");
+        $('.error-box').empty();
         $.ajax({
             type: 'POST',
             url: '/user/edit/' + $('#user_edit_id').val(),
@@ -54,8 +81,21 @@ $(document).ready(function(){
                 'email': $('#user_edit_email').val(),
                 'role': $('#user_edit_role').val(),
             },
-            success: function() {
-                location.reload();
+            success: function(data) {
+                if ($.isEmptyObject(data.error)) {
+                    location.reload();
+                }
+                else {
+                    $('#edit_user_error').addClass("border border-danger rounded");
+                    if (!($.isEmptyObject(data.error.name))) {
+                        $('#edit_user_error').append("<h2 class='pt-1'>" + data.error.name + "</h2>");
+                        $('#user_edit_name').addClass("border border-danger");
+                    }
+                    if (!($.isEmptyObject(data.error.email))) {
+                        $('#edit_user_error').append("<h2 class='pt-1'>" + data.error.email + "</h2>");
+                        $('#user_edit_email').addClass("border border-danger");
+                    }
+                }
             },
         });
     });

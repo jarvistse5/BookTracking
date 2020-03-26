@@ -66,15 +66,17 @@
                     <td scope="col">{{$book->status}}</td>
                 </tr>
             </table>
-            <br><br>
+            <br>
+            @if (Auth::user()->role >= 1 && $book->status == "inLibrary")
             <div class="">
-              <form action="{{ route('createBorrow') }}" method="get">
+              <form action="{{ route('manageBorrow') }}" method="get">
                   @csrf
                   <input type="hidden" name="book_id" value="{{ $book->id }}">
                   <button type="submit" id="leadbook_btn" class="btn btn-primary btn-lg btn-block" >Lead Book</a>
               </form>
             </div>
             <br>
+            @endif
             <div class="">
                 <button type="button" class="btn btn-primary btn-lg btn-block" onclick="window.location='{{ route('trackBook') }}'">Track Book</button>
             </div>

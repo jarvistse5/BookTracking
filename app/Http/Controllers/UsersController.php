@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 
 class UsersController extends Controller
 {
@@ -22,27 +23,38 @@ class UsersController extends Controller
 
     public function store()
     {
-        $data = request()->validate([
-              'name' => ['required', 'string', 'max:255'],
-              'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-              'password' => ['required', 'string', 'min:8'],
-              // 'password-confirm' => ['required', 'string', 'min:8'],
-              'role' => 'required',
+        $validator = Validator::make(request()->all(), [
+            'name' => 'required|max:255|unique:users',
+            'email' => 'required|email|max:255|unique:users',
+            'password' => 'required|min:8',
+            'password_confirm' => 'required|same:password',
         ]);
 
+        if ($validator->fails()) {
+            return response()->json(['error'=>$validator->getMessageBag()->toArray()]);
+        }
+
         User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-            'role' => $data['role'],
+            'name' => request('name'),
+            'email' => request('email'),
+            'password' => Hash::make(request('password')),
+            'role' => request('role'),
         ]);
 
         Session::flash('message', 'User has been created.');
-        return "success";
     }
 
     public function edit(request $request)
     {
+        $validator = Validator::make(request()->all(), [
+            'name' => 'required|max:255|unique:users,name,' . $request->id,
+            'email' => 'required|email|max:255|unique:users,email,' . $request->id,
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error'=>$validator->getMessageBag()->toArray()]);
+        }
+
         $user = User::find($request->id);
         $user->name = $request->name;
         $user->email = $request->email;
@@ -50,7 +62,6 @@ class UsersController extends Controller
         $user->save();
 
         Session::flash('message', 'User has been edited.');
-        return "success";
     }
 
     public function delete($id)
@@ -59,6 +70,5 @@ class UsersController extends Controller
         $user->delete();
 
         Session::flash('message', 'User has been deleted.');
-        return "success";
     }
 }

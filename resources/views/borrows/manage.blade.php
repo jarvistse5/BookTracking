@@ -2,6 +2,11 @@
 
 @section('content')
 
+<script type="application/javascript">
+  var js_books = '<?php echo json_encode($books); ?>';
+  var json_books = JSON.parse(js_books);
+</script>
+
 <div class="container text-center pagination-centered" id="manage_borrow">
   <div class="justify-content-center">
     @if (session('message'))
@@ -38,7 +43,9 @@
             </div>
         </div>
     </form>
-
+    @if ($book_id)
+    <div class="d-none" id="add_specific_book">{{$book_id}}</div>
+    @endif
     <div class="table-responsive">
       <table class="table table-dark table-hover">
         <thead>
@@ -87,7 +94,7 @@
                 {{ $borrow->return_at }}
               @else
                 <a href="#" class="return-btn-modal btn btn-light btn-sm" data-id="{{$borrow->id}}" data-bookid="{{$borrow->book_id}}" data-booktitle="{{$borrow->book->title}}" data-userid="{{$borrow->user_id}}" data-username="{{$borrow->user->name}}" data-borrowat="{{$borrow->borrow_at}}" data-deadlineat="{{$borrow->deadline_at}}" data-renewalnum="{{$borrow->renewal_num}}">
-                  <i class="glyphicon glyphicon-transfer"></i> Return Now
+                  <i class="glyphicon glyphicon-transfer"></i> Return
                 </a>
               @endif
             </td>
@@ -246,40 +253,48 @@
           @csrf
           <div class="row justify-content-center">
             <div class="col-md-8">
+              <div id="create_borrow_error" class="error-box text-center text-danger">
+              </div>
               <div class="row justify-content-between">
-                <div class="form-group row col-md-4">
+                <div class="form-group col-md-4">
                   <label for="book_id" class="pl-3 col-form-label">Book ID</label>
-                  <input id="borrow_create_book_id" onchange="autocomplete_create_book({{$books}})" type="text" class="form-control" name="book_id">
+                  <input id="borrow_create_book_id" onchange="autocomplete_create_book({{$books}})" type="text" class="form-control create-input" name="book_id">
                 </div>
-                <div class="form-group row col-md-8">
+                <div class="form-group col-md-8">
                   <label for="book_title" class="pl-3 col-form-label">Book Title</label>
                   <input id="borrow_create_book_title" type="text" class="form-control" name="book_title" disabled>
                 </div>
               </div>
               <div class="row justify-content-between">
-                <div class="form-group row col-md-4">
+                <div class="form-group col-md-4">
                   <label for="user_id" class="pl-3 col-form-label">User ID</label>
-                  <input id="borrow_create_user_id" onchange="autocomplete_create_user({{$users}})" type="text" class="form-control" name="user_id">
+                  <input id="borrow_create_user_id" onchange="autocomplete_create_user({{$users}})" type="text" class="form-control create-input" name="user_id">
                 </div>
-                <div class="form-group row col-md-8">
+                <div class="form-group col-md-8">
                   <label for="user_name" class="pl-3 col-form-label">User Name</label>
                   <input id="borrow_create_user_name" type="text" class="form-control" name="user_name" disabled>
                 </div>
               </div>
-              <div class="form-group row" onchange="change_deadline()">
+              <div class="form-group" onchange="change_deadline()">
                 <label for="borrow_at" class="pl-3 col-form-label">Borrow At</label>
-                <input id="borrow_at" type="text" class="form-control selectDate" name="borrow_at">
+                <div class="input-group-append">
+                  <input id="borrow_at" type="text" class="form-control selectDate create-input" name="borrow_at">
+                  <span class="input-group-text"><i class="glyphicon glyphicon-calendar"></i></span>
+                </div>
               </div>
-              <div class="form-group row">
+              <div class="form-group">
                 <label for="deadline_at" class="pl-3 col-form-label">Deadline At</label>
-                <input id="deadline_at" type="text" class="form-control selectDate" name="deadline_at">
+                <div class="input-group-append">
+                  <input id="deadline_at" type="text" class="form-control selectDate create-input" name="deadline_at">
+                  <span class="input-group-text"><i class="glyphicon glyphicon-calendar"></i></span>
+                </div>
               </div>
             </div>
           </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-success" id="create_record_btn" data-token="{{ csrf_token() }}" data-dismiss="modal">
+        <button type="button" class="btn btn-success" id="create_record_btn" data-token="{{ csrf_token() }}">
           <span class="glyphicon glyphicon-trash"></span> Submit
         </button>
         <button type="button" class="btn btn-warning" data-dismiss="modal">
@@ -303,58 +318,69 @@
           @csrf
           <div class="row justify-content-center">
             <div class="col-md-8">
-              <div class="form-group row">
+              <div id="edit_borrow_error" class="error-box text-center text-danger">
+              </div>
+              <div class="form-group">
                 <label for="id" class="pl-3 col-form-label">Record ID</label>
                 <input id="borrow_edit_id" type="text" class="form-control" name="id" disabled>
               </div>
               <div class="row justify-content-between">
-                <div class="form-group row col-md-4">
+                <div class="form-group col-md-4">
                   <label for="book_id" class="pl-3 col-form-label">Book ID</label>
-                  <input id="borrow_edit_book_id" onchange="autocomplete_edit_book({{$books}})" type="text" class="form-control" name="book_id">
+                  <input id="borrow_edit_book_id" onchange="autocomplete_edit_book({{$books}})" type="text" class="form-control edit-input" name="book_id">
                 </div>
-                <div class="form-group row col-md-8">
+                <div class="form-group col-md-8">
                   <label for="book_title" class="pl-3 col-form-label">Book Title</label>
                   <input id="borrow_edit_book_title" type="text" class="form-control" name="book_title" disabled>
                 </div>
               </div>
               <div class="row justify-content-between">
-                <div class="form-group row col-md-4">
+                <div class="form-group col-md-4">
                   <label for="user_id" class="pl-3 col-form-label">User ID</label>
-                  <input id="borrow_edit_user_id" onchange="autocomplete_edit_user({{$users}})" type="text" class="form-control" name="user_id">
+                  <input id="borrow_edit_user_id" onchange="autocomplete_edit_user({{$users}})" type="text" class="form-control edit-input" name="user_id">
                 </div>
-                <div class="form-group row col-md-8">
+                <div class="form-group col-md-8">
                   <label for="user_name" class="pl-3 col-form-label">User Name</label>
                   <input id="borrow_edit_user_name" type="text" class="form-control" name="user_name" disabled>
                 </div>
               </div>
               <div class="row justify-content-between">
-                <div class="form-group row col-md-6">
+                <div class="form-group col-md-6">
                   <label for="staff_id" class="pl-3 col-form-label">Staff ID</label>
-                  <input id="borrow_edit_staff_id" type="text" class="form-control" name="staff_id">
+                  <input id="borrow_edit_staff_id" type="text" class="form-control edit-input" name="staff_id">
                 </div>
-                <div class="form-group row col-md-6">
+                <div class="form-group col-md-6">
                   <label for="renewal_num" class="pl-3 col-form-label">Renewal No.</label>
-                  <input id="borrow_edit_renewal_num" type="text" class="form-control" name="renewal_num">
+                  <input id="borrow_edit_renewal_num" type="text" class="form-control edit-input" name="renewal_num">
                 </div>
               </div>
-              <div class="form-group row">
+              <div class="form-group">
                 <label for="borrow_at" class="pl-3 col-form-label">Borrow At</label>
-                <input id="borrow_edit_borrow_at" type="text" class="form-control selectDate" name="borrow_at">
+                <div class="input-group-append">
+                  <input id="borrow_edit_borrow_at" type="text" class="form-control selectDate edit-input" name="borrow_at">
+                  <span class="input-group-text"><i class="glyphicon glyphicon-calendar"></i></span>
+                </div>
               </div>
-              <div class="form-group row">
+              <div class="form-group">
                 <label for="deadline_at" class="pl-3 col-form-label">Deadline At</label>
-                <input id="borrow_edit_deadline_at" type="text" class="form-control selectDate" name="deadline_at">
+                <div class="input-group-append">
+                  <input id="borrow_edit_deadline_at" type="text" class="form-control selectDate edit-input" name="deadline_at">
+                  <span class="input-group-text"><i class="glyphicon glyphicon-calendar"></i></span>
+                </div>
               </div>
-              <div class="form-group row">
+              <div class="form-group">
                 <label for="return_at" class="pl-3 col-form-label">Return At</label>
-                <input id="borrow_edit_return_at" type="text" class="form-control selectDate" name="return_at">
+                <div class="input-group-append">
+                  <input id="borrow_edit_return_at" type="text" class="form-control selectDate edit-input" name="return_at">
+                  <span class="input-group-text"><i class="glyphicon glyphicon-calendar"></i></span>
+                </div>
               </div>
             </div>
           </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-success" id="edit_record_btn" data-token="{{ csrf_token() }}" data-dismiss="modal">
+        <button type="button" class="btn btn-success" id="edit_record_btn" data-token="{{ csrf_token() }}">
           <span class="glyphicon glyphicon-trash"></span> Submit
         </button>
         <button type="button" class="btn btn-warning" data-dismiss="modal">

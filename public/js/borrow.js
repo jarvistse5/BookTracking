@@ -1,13 +1,3 @@
-function selectBook() {
-    var id = document.getElementById("book_name").value;
-    document.getElementById("book_id").value = id;
-}
-
-function selectUser() {
-    var id = document.getElementById("user_name").value;
-    document.getElementById("user_id").value = id;
-}
-
 function change_date_format(date) {
     var day = ('0' + date.getDate()).slice(-2);
     var month = ('0' + (date.getMonth() + 1)).slice(-2);
@@ -145,15 +135,6 @@ $(document).on('click', '.record-delete-modal', function() {
 });
 
 $(document).ready(function(){
-    $('#create_borrow').ready(function() {
-        var currentDate = new Date();
-        var borrow_date = change_date_format(currentDate);
-        currentDate.setDate(currentDate.getDate() + 14);
-        var deadline_date = change_date_format(currentDate);
-        $('#borrow_at').val(borrow_date);
-        $('#deadline_at').val(deadline_date);
-    });
-
     $('#manage_borrow').ready(function() {
         var currentDate = new Date();
         var borrow_date = change_date_format(currentDate);
@@ -162,6 +143,13 @@ $(document).ready(function(){
         $('#borrow_at').val(borrow_date);
         $('#deadline_at').val(deadline_date);
     });
+
+    if ($('#add_specific_book').html()) {
+        var book_id = $('#add_specific_book').html();
+        $('#borrow_create_book_id').val(book_id);
+        autocomplete_create_book(json_books);
+        $('#record-create-modal').modal('show');
+    }
 
     <!-- Submit Return Form -->
     $("#return_submit_btn").on('click', function() {
@@ -174,7 +162,7 @@ $(document).ready(function(){
                 'return_at': $('#return_return_at').html(),
             },
             success: function() {
-                location.reload();
+                window.location.href = "manage";
             },
         });
     });
@@ -190,32 +178,60 @@ $(document).ready(function(){
                 'deadline_at': $('#renew_n_deadline_at').html(),
             },
             success: function() {
-                location.reload();
+                window.location.href = "manage";
             },
         });
     });
 
     <!-- Submit Create Form -->
     $("#create_record_btn").on('click', function() {
+        $('.create-input').removeClass("border border-danger");
+        $('.error-box').removeClass("border border-danger rounded");
+        $('.error-box').empty();
         $.ajax({
             type: 'POST',
             url: '/borrow/store',
             enctype: 'multipart/form-data',
             data: {
                 '_token': $('input[name=_token]').val(),
-                'book_name': $('#borrow_create_book_id').val(),
-                'user_name': $('#borrow_create_user_id').val(),
+                'book_id': $('#borrow_create_book_id').val(),
+                'user_id': $('#borrow_create_user_id').val(),
                 'borrow_at': $('#borrow_at').val(),
                 'deadline_at': $('#deadline_at').val(),
             },
-            success: function() {
-                location.reload();
+            success: function(data) {
+                // location.reload();
+                if ($.isEmptyObject(data.error)) {
+                    window.location.href = "manage";
+                }
+                else {
+                    $('#create_borrow_error').addClass("border border-danger rounded");
+                    if (!($.isEmptyObject(data.error.book_id))) {
+                        $('#create_borrow_error').append("<h2 class='pt-1'>" + data.error.book_id + "</h2>");
+                        $('#borrow_create_book_id').addClass("border border-danger");
+                    }
+                    if (!($.isEmptyObject(data.error.user_id))) {
+                        $('#create_borrow_error').append("<h2 class='pt-1'>" + data.error.user_id + "</h2>");
+                        $('#borrow_create_user_id').addClass("border border-danger");
+                    }
+                    if (!($.isEmptyObject(data.error.borrow_at))) {
+                        $('#create_borrow_error').append("<h2 class='pt-1'>" + data.error.borrow_at + "</h2>");
+                        $('#borrow_at').addClass("border border-danger");
+                    }
+                    if (!($.isEmptyObject(data.error.deadline_at))) {
+                        $('#create_borrow_error').append("<h2 class='pt-1'>" + data.error.deadline_at + "</h2>");
+                        $('#deadline_at').addClass("border border-danger");
+                    }
+                }
             },
         });
     });
 
     <!-- Submit Edit Form -->
     $("#edit_record_btn").on('click', function() {
+        $('.edit-input').removeClass("border border-danger");
+        $('.error-box').removeClass("border border-danger rounded");
+        $('.error-box').empty();
         $.ajax({
             type: 'POST',
             url: '/borrow/edit/' + $('#borrow_edit_id').val(),
@@ -231,8 +247,41 @@ $(document).ready(function(){
                 'return_at': $('#borrow_edit_return_at').val(),
                 'renewal_num': $('#borrow_edit_renewal_num').val(),
             },
-            success: function() {
-                location.reload();
+            success: function(data) {
+                if ($.isEmptyObject(data.error)) {
+                    window.location.href = "manage";
+                }
+                else {
+                    $('#edit_borrow_error').addClass("border border-danger rounded");
+                    if (!($.isEmptyObject(data.error.book_id))) {
+                        $('#edit_borrow_error').append("<h2 class='pt-1'>" + data.error.book_id + "</h2>");
+                        $('#borrow_edit_book_id').addClass("border border-danger");
+                    }
+                    if (!($.isEmptyObject(data.error.user_id))) {
+                        $('#edit_borrow_error').append("<h2 class='pt-1'>" + data.error.user_id + "</h2>");
+                        $('#borrow_edit_user_id').addClass("border border-danger");
+                    }
+                    if (!($.isEmptyObject(data.error.staff_id))) {
+                        $('#edit_borrow_error').append("<h2 class='pt-1'>" + data.error.staff_id + "</h2>");
+                        $('#borrow_edit_staff_id').addClass("border border-danger");
+                    }
+                    if (!($.isEmptyObject(data.error.renewal_num))) {
+                        $('#edit_borrow_error').append("<h2 class='pt-1'>" + data.error.renewal_num + "</h2>");
+                        $('#borrow_edit_renewal_num').addClass("border border-danger");
+                    }
+                    if (!($.isEmptyObject(data.error.borrow_at))) {
+                        $('#edit_borrow_error').append("<h2 class='pt-1'>" + data.error.borrow_at + "</h2>");
+                        $('#borrow_edit_borrow_at').addClass("border border-danger");
+                    }
+                    if (!($.isEmptyObject(data.error.deadline_at))) {
+                        $('#edit_borrow_error').append("<h2 class='pt-1'>" + data.error.deadline_at + "</h2>");
+                        $('#borrow_edit_deadline_at').addClass("border border-danger");
+                    }
+                    if (!($.isEmptyObject(data.error.return_at))) {
+                        $('#edit_borrow_error').append("<h2 class='pt-1'>" + data.error.return_at + "</h2>");
+                        $('#borrow_edit_return_at').addClass("border border-danger");
+                    }
+                }
             },
         });
     });
@@ -244,7 +293,7 @@ $(document).ready(function(){
             url: '/borrow/delete/' + $('#del_record_borrow_id').html(),
             enctype: 'multipart/form-data',
             success: function() {
-                location.reload();
+                window.location.href = "manage";
             },
         });
     });

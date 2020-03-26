@@ -9,6 +9,7 @@ use App\Book;
 use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 
 class BorrowsController extends Controller
 {
@@ -21,6 +22,9 @@ class BorrowsController extends Controller
     {
         $content = $request->search_content;
         $field = $request->search_field;
+
+        $book_id = $request->book_id;
+
         $users = User::all();
         $books = Book::all();
 
@@ -38,7 +42,7 @@ class BorrowsController extends Controller
         else
             $borrows = Borrow::where($field, 'like', '%'.$content.'%')->get();
 
-        return view('borrows.manage', compact('borrows', 'users', 'books'));
+        return view('borrows.manage', compact('borrows', 'users', 'books', 'book_id'));
     }
 
     public function record($id)
@@ -52,37 +56,46 @@ class BorrowsController extends Controller
         return view('borrows.record', compact('records', 'user'));
     }
 
-    public function create()
-    {
-        $book_id = request('book_id');
-        $books = Book::all();
-        $users = User::where('role', 0)->get();
-        return view('borrows.create', compact('book_id', 'books', 'users'));
-    }
-
-    public function add()
-    {
-        $data = array(
-            'book_id' => (int)request('book_name'),
-            'user_id' => (int)request('user_name'),
-            'staff_id' => Auth::id(),
-            'borrow_at' => request('borrow_at'),
-            'deadline_at' => request('deadline_at'),
-            'return_at' => null,
-            'renewal_num' => 0,
-        );
-        $b = Borrow::create($data);
-        $book = Book::find(request('book_name'));
-        $book->status = "Lend";
-        $book->save();
-        return redirect()->route('manageBorrow')->with('message', 'The record has been created.');
-    }
-
     public function store()
     {
+        $validator = Validator::make(request()->all(), [
+            'book_id' => 'required|integer',
+            'user_id' => 'required|integer',
+            'borrow_at' => 'required|date',
+            'deadline_at' => 'required|date',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error'=>$validator->getMessageBag()->toArray()]);
+        }
+
+        $validator->after(function($validator) {
+            if (!Book::find(request('book_id'))) {
+                $validator->errors()->add('book_id', 'Cannot found the book.');
+            }
+            else if (Book::find(request('book_id'))->status != 'inLibrary') {
+                $validator->errors()->add('book_id', 'The book is ' . Book::find(request('book_id'))->status . '.');
+            }
+            else;
+            if (!User::find(request('user_id'))) {
+                $validator->errors()->add('user_id', 'Cannot found the user.');
+            }
+            else if (User::find(request('user_id'))-> role != 0) {
+                $validator->errors()->add('user_id', 'Staff cannot borrow book.');
+            }
+            else;
+            if (request('borrow_at') > request('deadline_at')) {
+                $validator->errors()->add('deadline_at', 'Deadline cannot earlier than borrow date.');
+            }
+        });
+
+        if ($validator->fails()) {
+            return response()->json(['error'=>$validator->getMessageBag()->toArray()]);
+        }
+
         $data = array(
-            'book_id' => (int)request('book_name'),
-            'user_id' => (int)request('user_name'),
+            'book_id' => (int)request('book_id'),
+            'user_id' => (int)request('user_id'),
             'staff_id' => Auth::id(),
             'borrow_at' => request('borrow_at'),
             'deadline_at' => request('deadline_at'),
@@ -90,11 +103,10 @@ class BorrowsController extends Controller
             'renewal_num' => 0,
         );
         $b = Borrow::create($data);
-        $book = Book::find(request('book_name'));
+        $book = Book::find(request('book_id'));
         $book->status = "Lend";
         $book->save();
         Session::flash('message', 'The record has been created.');
-        return "success";
     }
 
     public function remand($id)
@@ -106,7 +118,6 @@ class BorrowsController extends Controller
         $book->status = "inLibrary";
         $book->save();
         Session::flash('message', 'The book has been returned.');
-        return "success";
     }
 
     public function renewal($id)
@@ -116,11 +127,51 @@ class BorrowsController extends Controller
         $borrow->renewal_num = $borrow->renewal_num + 1;
         $borrow->save();
         Session::flash('message', 'Deadline has been postponed to ' . request('deadline_at') . '.');
-        return "success";
     }
 
     public function edit($id)
     {
+        $validator = Validator::make(request()->all(), [
+            'book_id' => 'required|integer',
+            'user_id' => 'required|integer',
+            'staff_id' => 'required|integer',
+            'renewal_num' => 'required|integer',
+            'borrow_at' => 'required|date',
+            'deadline_at' => 'required|date',
+            'return_at' => 'nullable|date',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error'=>$validator->getMessageBag()->toArray()]);
+        }
+        $validator->after(function($validator) {
+            if (!Book::find(request('book_id'))) {
+                $validator->errors()->add('book_id', 'Cannot found the book.');
+            }
+            else if (Book::find(request('book_id'))->status != 'inLibrary' && request('book_id') != Borrow::find(request('id'))->book_id) {
+                $validator->errors()->add('book_id', 'The book is ' . Book::find(request('book_id'))->status . '.');
+            }
+            else;
+            if (!User::find(request('user_id'))) {
+                $validator->errors()->add('user_id', 'Cannot found the user.');
+            }
+            else if (User::find(request('user_id'))-> role != 0) {
+                $validator->errors()->add('user_id', 'Staff cannot borrow book.');
+            }
+            else;
+            if (!User::find(request('staff_id'))) {
+                $validator->errors()->add('staff_id', 'Cannot found the staff.');
+            }
+            else if (User::find(request('staff_id'))->role < 1) {
+                $validator->errors()->add('staff_id', 'The user is not a staff.');
+            }
+            else;
+            if (request('borrow_at') > request('deadline_at')) {
+                $validator->errors()->add('deadline_at', 'Deadline cannot earlier than borrow date.');
+            }
+        });
+        if ($validator->fails()) {
+            return response()->json(['error'=>$validator->getMessageBag()->toArray()]);
+        }
         $borrow = Borrow::find($id);
         $borrow->book_id = (int)request('book_id');
         $borrow->user_id = (int)request('user_id');
@@ -131,7 +182,6 @@ class BorrowsController extends Controller
         $borrow->return_at = request('return_at');
         $borrow->save();
         Session::flash('message', 'Borrow record has been edited.');
-        return "success";
     }
 
     public function delete($id)
@@ -139,7 +189,6 @@ class BorrowsController extends Controller
         $borrow = Borrow::find($id);
         $borrow->delete();
         Session::flash('message', 'Borrow record has been deleted.');
-        return "success";
     }
 
     // php artisan migrate:refresh --path=/database/migrations/2020_02_24_103035_create_borrows_table.php

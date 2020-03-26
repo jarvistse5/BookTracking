@@ -42,8 +42,6 @@ Route::group(['middleware' => ['admin']], function () {
 
 Route::group(['middleware' => ['manager']], function () {
     Route::get('/borrow/manage', 'BorrowsController@manage')->name('manageBorrow');
-    Route::get('/borrow/create', 'BorrowsController@create')->name('createBorrow');
-    Route::post('/borrow/add', 'BorrowsController@add');
     Route::post('/borrow/store', 'BorrowsController@store');
     Route::get('/borrow/return/{id}', 'BorrowsController@remand');
     Route::get('/borrow/renew/{id}', 'BorrowsController@renewal');

@@ -9,6 +9,7 @@ use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 
 class BooksController extends Controller
 {
@@ -57,19 +58,36 @@ class BooksController extends Controller
 
     public function store()
     {
-        $data = request()->validate([
-            'title' => 'required',
-            'author' => 'nullable',
-            'publisher' => 'nullable',
-            'publicationYear' => 'nullable',
-            'language' => 'nullable',
-            'ISBN' => 'nullable',
-            'description' => 'nullable',
-            'pageNumber' => 'nullable',
-            'type' => 'nullable',
+        $validator = Validator::make(request()->all(), [
+            'title' => 'required|max:255',
+            'author' => 'nullable|max:255',
+            'type' => 'required',
+            'publisher' => 'nullable|max:255',
+            'publicationYear' => 'nullable|integer',
+            'language' => 'nullable|max:255',
+            'ISBN' => 'nullable|integer',
+            'description' => 'nullable|max:255',
+            'pageNumber' => 'nullable|integer',
             'status' => 'required',
-            'image' => 'nullable',
+            'image' => 'nullable|image',
         ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error'=>$validator->getMessageBag()->toArray()]);
+        }
+        $data = array(
+            'title' => request('title'),
+            'author' => request('author'),
+            'type' => request('type'),
+            'publisher' => request('publisher'),
+            'publicationYear' => request('publicationYear'),
+            'language' => request('language'),
+            'ISBN' => request('ISBN'),
+            'description' => request('description'),
+            'pageNumber' => request('pageNumber'),
+            'status' => request('status'),
+            'image' => request('image'),
+        );
         if (request('image') == '') {
             Book::create($data);
         }
@@ -82,7 +100,6 @@ class BooksController extends Controller
           // $upload = $image->move($fullPath, $imageName);
             $image = request('image');
             $imagePath = $image->store('uploads', 'public');
-            // return ($imagePath);
             Book::create([
                 'title' => $data['title'],
                 'author' => $data['author'],
@@ -98,10 +115,25 @@ class BooksController extends Controller
             ]);
         }
         Session::flash('message', 'Book has been added.');
-        return "success";
     }
 
     public function edit($id){
+        $validator = Validator::make(request()->all(), [
+            'title' => 'required|max:255',
+            'author' => 'nullable|max:255',
+            'type' => 'required',
+            'publisher' => 'nullable|max:255',
+            'publicationYear' => 'nullable|integer',
+            'language' => 'nullable|max:255',
+            'ISBN' => 'nullable|integer',
+            'description' => 'nullable|max:255',
+            'pageNumber' => 'nullable|integer',
+            'status' => 'required',
+            'image' => 'nullable|image',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error'=>$validator->getMessageBag()->toArray()]);
+        }
         $book = Book::find($id);
         if(request('image')) {
             // Has image before
@@ -134,7 +166,6 @@ class BooksController extends Controller
         $book->save();
 
         Session::flash('message', 'Book has been edited.');
-        return "success";
     }
 
     public function delete($id)
@@ -149,7 +180,6 @@ class BooksController extends Controller
         $book->delete();
 
         Session::flash('message', 'Book has been deleted.');
-        return "success";
     }
 
     public function track()

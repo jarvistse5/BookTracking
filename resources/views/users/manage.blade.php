@@ -69,27 +69,28 @@
             @csrf
             <div class="row justify-content-center">
                 <div class="col-md-8">
-                    <div class="form-group row">
+                    <div id="add_user_error" class="error-box text-center text-danger"></div>
+                    <div class="form-group">
                         <label for="name" class="pl-3 col-form-label">Name</label>
-                        <input id="name" type="text" class="form-control" name="name" caption="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
+                        <input id="name" type="text" class="form-control add-input" name="name" caption="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
                     </div>
 
-                    <div class="form-group row">
+                    <div class="form-group">
                         <label for="email" class="pl-3 col-form-label">Email</label>
-                        <input id="email" type="text" class="form-control" name="email" caption="email" value="{{ old('email') }}" autocomplete="email" autofocus>
+                        <input id="email" type="text" class="form-control add-input" name="email" caption="email" value="{{ old('email') }}" autocomplete="email" autofocus>
                     </div>
 
-                    <div class="form-group row">
+                    <div class="form-group">
                         <label for="password" class="pl-3 col-form-label text-md-right">{{ __('Password') }}</label>
-                        <input id="password" type="password" class="form-control" name="password" required autocomplete="new-password">
+                        <input id="password" type="password" class="form-control add-input" name="password" required autocomplete="new-password">
                     </div>
 
-                    <div class="form-group row">
+                    <div class="form-group">
                         <label for="password-confirm" class="pl-3 col-form-label text-md-right">{{ __('Confirm Password') }}</label>
-                        <input id="password-confirm" type="password" class="form-control" name="password-confirm" required autocomplete="new-password">
+                        <input id="password-confirm" type="password" class="form-control add-input" name="password-confirm" required autocomplete="new-password">
                     </div>
 
-                    <div class="form-group row">
+                    <div class="form-group">
                         <label for="role" class="pl-3 col-form-label">Role</label>
                         <select id="role" class="form-control custom-select custom-select-lg mb-3" name="role">
                             <option value=0>User</option>
@@ -126,21 +127,22 @@
             @csrf
             <div class="row justify-content-center">
                 <div class="col-md-8">
-                    <div class="form-group row">
+                    <div id="edit_user_error" class="error-box text-center text-danger"></div>
+                    <div class="form-group">
                         <label for="id" class="pl-3 col-form-label">ID</label>
                         <input id="user_edit_id" type="text" class="form-control" disabled>
                     </div>
-                    <div class="form-group row">
+                    <div class="form-group">
                         <label for="name" class="pl-3 col-form-label">Name</label>
-                        <input id="user_edit_name" type="text" class="form-control" required>
+                        <input id="user_edit_name" type="text" class="form-control edit-input" required>
                     </div>
 
-                    <div class="form-group row">
+                    <div class="form-group">
                         <label for="email" class="pl-3 col-form-label">Email</label>
-                        <input id="user_edit_email" type="text" class="form-control">
+                        <input id="user_edit_email" type="text" class="form-control edit-input">
                     </div>
 
-                    <div class="form-group row">
+                    <div class="form-group">
                         <label for="role" class="pl-3 col-form-label">Role</label>
                         <select id="user_edit_role" class="form-control custom-select custom-select-lg mb-3">
                             <option value=0>User</option>
@@ -154,7 +156,7 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-success edit" id="edit_user_btn" data-dismiss="modal">
+        <button type="submit" class="btn btn-success edit" id="edit_user_btn">
           <span class="glyphicon glyphicon-check"></span> Edit
         </button>
         <button type="button" class="btn btn-warning" data-dismiss="modal">
