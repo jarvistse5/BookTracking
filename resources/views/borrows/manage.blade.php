@@ -3,8 +3,7 @@
 @section('content')
 
 <script type="application/javascript">
-  var js_books = '<?php echo json_encode($books); ?>';
-  var json_books = JSON.parse(js_books);
+  var json_books = @json($books);
 </script>
 
 <div class="container text-center pagination-centered" id="manage_borrow">

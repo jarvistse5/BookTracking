@@ -82,12 +82,13 @@
                         <div class="collapse pb-2" id="update1">
                           <div class="card card-body">
                             <p>Update content:</p>
-                            <p>Validation</p>
+                            <p>Validation, remove create borrow page</p>
                             <br>
                             <p>Update file:</p>
                             <p>Whole views folders</p>
                             <p>JS file: book_manage.js, borrow.js, user_manage.js</p>
                             <p>Controller: Books, Borrows, Users</p>
+                            <p>Route: web.php</p>
                           </div>
                         </div>
                     </div>
