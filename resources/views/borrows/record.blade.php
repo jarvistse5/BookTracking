@@ -26,7 +26,7 @@
           @foreach ($records as $record)
           <tr>
             <td>{{ $record->id }}</td>
-            <td>{{ $record->book->title }}</td>
+            <td align="left">{{ $record->book->title }}</td>
             <td>{{ $record->borrow_at }}</td>
             <td>{{ $record->deadline_at }}</td>
             @if ($record->return_at)

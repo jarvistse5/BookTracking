@@ -294,7 +294,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-success" id="create_record_btn" data-token="{{ csrf_token() }}">
-          <span class="glyphicon glyphicon-trash"></span> Submit
+          <span class="glyphicon glyphicon-plus"></span> Submit
         </button>
         <button type="button" class="btn btn-warning" data-dismiss="modal">
           <span class="glyphicon glyphicon-remobe"></span>Close
@@ -380,7 +380,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-success" id="edit_record_btn" data-token="{{ csrf_token() }}">
-          <span class="glyphicon glyphicon-trash"></span> Submit
+          <span class="glyphicon glyphicon-pencil"></span> Submit
         </button>
         <button type="button" class="btn btn-warning" data-dismiss="modal">
           <span class="glyphicon glyphicon-remobe"></span>Close
@@ -443,7 +443,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" id="delete_record_btn" data-token="{{ csrf_token() }}" data-dismiss="modal">
-          <span class="glyphicon glyphicon-trash"></span> Delete
+          <span class="glyphicon glyphicon-pencil"></span> Delete
         </button>
         <button type="button" class="btn btn-warning" data-dismiss="modal">
           <span class="glyphicon glyphicon-remobe"></span>Close

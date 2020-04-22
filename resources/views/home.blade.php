@@ -91,6 +91,21 @@
                             <p>Route: web.php</p>
                           </div>
                         </div>
+                        <p>
+                          <a class="btn btn-primary" data-toggle="collapse" href="#update2">22/4 17:00 Update List:</a>
+                        </p>
+                        <div class="collapse pb-2" id="update1">
+                          <div class="card card-body">
+                            <p>Update content:</p>
+                            <p>Android App API</p>
+                            <br>
+                            <p>Update file:</p>
+                            <p>Whole views folders</p>
+                            <p>home.blade.php</p>
+                            <p>Controller: Controllers/API</p>
+                            <p>Route: api.php</p>
+                          </div>
+                        </div>
                     </div>
                     </div>
                 </div>

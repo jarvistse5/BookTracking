@@ -13,6 +13,15 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::post('/b/list', 'API\BooksController@list');
+Route::get('b/detail/{id}', 'API\BooksController@detail');
+Route::get('user/{id}', 'API\AuthController@getUser');
+Route::get('/record/{id}', 'API\BooksController@record');
+Route::post('/login', 'API\AuthController@login');
+Route::post('/signup', 'API\AuthController@signup');
+
+// Route::get('/b/list', 'API\BooksController@list');
+
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
